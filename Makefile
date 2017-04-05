@@ -18,7 +18,9 @@ all: fetch setup
 	@echo
 	@echo "=== web ==="
 	@${MAKE} ${MAKEFLAGS} -C projects/web
-	@${MAKE} ${MAKEFLAGS} -C projects/redmine db
+	@echo
+	@echo "=== configure ==="
+	@${MAKE} ${MAKEFLAGS} -C projects/redmine web
 .endif
 
 init:
