@@ -38,7 +38,7 @@ fetch_subproject: init
 	git clone https://github.com/mekanix/jail-${SUBPROJECT} projects/${SUBPROJECT}
 .endif
 
-setup:
+setup: credentials
 	@${MAKE} ${MAKEFLAGS} SUBPROJECT=postgresql setup_subproject
 	@${MAKE} ${MAKEFLAGS} SUBPROJECT=redmine setup_subproject
 	@${MAKE} ${MAKEFLAGS} SUBPROJECT=web setup_subproject
@@ -81,4 +81,12 @@ down: setup
 	@${MAKE} ${MAKEFLAGS} -C projects/postgresql down
 	@${MAKE} ${MAKEFLAGS} -C projects/redmine down
 	@${MAKE} ${MAKEFLAGS} -C projects/web down
+.endif
+
+credentials:
+.if !exists(${REDMINE_GROUP_VAR_FILE})
+	@echo -n 'Enter new DB password: '
+	@sh -c 'stty -echo; read prompt; echo "stage: ${STAGE}" ; echo "redmine_db_password: $$prompt"' >${REDMINE_GROUP_VAR_FILE}
+	@cp ${REDMINE_GROUP_VAR_FILE} ${DB_GROUP_VAR_FILE}
+	@echo
 .endif
