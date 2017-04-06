@@ -90,3 +90,18 @@ credentials:
 	@cp ${REDMINE_GROUP_VAR_FILE} ${DB_GROUP_VAR_FILE}
 	@echo
 .endif
+
+export:
+.if defined(jail)
+	@echo "=== ${jail} ==="
+	@${MAKE} ${MAKEFLAGS} -C projects/${jail} export
+.else
+	@echo "=== postgresql ==="
+	@${MAKE} ${MAKEFLAGS} -C projects/postgresql export
+	@echo
+	@echo "=== redmine ==="
+	@${MAKE} ${MAKEFLAGS} -C projects/redmine export
+	@echo
+	@echo "=== web ==="
+	@${MAKE} ${MAKEFLAGS} -C projects/web export
+.endif
